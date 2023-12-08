@@ -16,6 +16,17 @@ namespace DevFreela.Infrastructure.Persistence.Configurations
         {
             builder
                 .HasKey(p => p.Id);
+
+            builder
+                .HasOne(p => p.Skill)
+                .WithMany()
+                .HasForeignKey(p => p.IdSkill);
+
+            builder
+                .HasOne(u => u.User)
+                .WithMany()
+                .HasForeignKey(u => u.IdUser);
+
         }
     }
 }

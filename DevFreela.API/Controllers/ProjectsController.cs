@@ -65,11 +65,6 @@ namespace DevFreela.API.Controllers
         [Authorize(Roles = "client")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
         {
-            if (command.Description.Length > 200)
-            {
-                return BadRequest();
-            }
-
             await _mediator.Send(command);    
 
             return NoContent();
@@ -86,9 +81,9 @@ namespace DevFreela.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/comments")]
+        [HttpPost("comments")]
         [Authorize(Roles = "client, freelancer")]
-        public async Task<IActionResult>  PostComment(int id, [FromBody] CreateCommentCommand command)
+        public async Task<IActionResult>  PostComment([FromBody] CreateCommentCommand command)
         {
             await _mediator.Send(command);
 

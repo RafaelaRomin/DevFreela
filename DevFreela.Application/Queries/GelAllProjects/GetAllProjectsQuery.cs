@@ -10,6 +10,6 @@ namespace DevFreela.Application.Queries.GelAllProjects
             Query = query;
         }
 
-        public string Query { get; private set; }
+        public string Query { get;  set; }
     }
 }

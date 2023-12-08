@@ -21,8 +21,12 @@ namespace DevFreela.Application.Queries.GeUser
             {
                 return null;
             }
+            var userViewModel = new UserViewModel(
+                user.Name,
+                user.Email
+            );
 
-            return new UserViewModel(user.Name, user.Email);
+            return userViewModel;
         }
     }
 }

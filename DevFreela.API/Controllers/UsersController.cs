@@ -1,8 +1,6 @@
-﻿using DevFreela.API.Models;
-using DevFreela.Application.Commands.CreateUser;
+﻿using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Queries.GeUser;
-using DevFreela.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +22,7 @@ namespace DevFreela.API.Controllers
         {
             var query = new GetUserQuery(id);
 
-            var user = _mediator.Send(query);
+            var user = await _mediator.Send(query);
 
             if (user == null)
             {

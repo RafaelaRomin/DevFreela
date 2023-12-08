@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevFreela.Application.Commands.StartProject
+namespace DevFreela.Application.Queries.GetSkillById
 {
-    public class StartProjectCommand : IRequest<Unit>
+    public class GetSkillByIdQuery : IRequest<int>
     {
-        public StartProjectCommand(int id)
+        public GetSkillByIdQuery(int id)
         {
             Id = id;
         }
 
-        public int Id { get;  set; }
+        public int Id { get; set; }
     }
 }

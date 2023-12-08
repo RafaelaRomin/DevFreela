@@ -4,7 +4,6 @@ using DevFreela.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevFreela.Infrastructure.Migrations
 {
     [DbContext(typeof(DevFreelaDbContext))]
-    [Migration("20231202211430_AddLogin")]
-    partial class AddLogin
+    partial class DevFreelaDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,14 +171,11 @@ namespace DevFreela.Infrastructure.Migrations
                     b.Property<int>("IdUser")
                         .HasColumnType("int");
 
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdSkill");
 
-                    b.HasIndex("SkillId");
+                    b.HasIndex("IdUser");
 
                     b.ToTable("UserSkills");
                 });
@@ -226,19 +220,27 @@ namespace DevFreela.Infrastructure.Migrations
 
             modelBuilder.Entity("DevFreela.Core.Entities.UserSkill", b =>
                 {
+                    b.HasOne("DevFreela.Core.Entities.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("IdSkill")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DevFreela.Core.Entities.User", null)
                         .WithMany("Skills")
                         .HasForeignKey("IdSkill")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DevFreela.Core.Entities.Skill", "Skill")
+                    b.HasOne("DevFreela.Core.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("SkillId")
+                        .HasForeignKey("IdUser")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Skill");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DevFreela.Core.Entities.Project", b =>

@@ -1,5 +1,6 @@
 ﻿using DevFreela.Core.Entities;
 using DevFreela.Core.Enums;
+using Xunit;
 
 namespace DevFreela.UnitTests.Core.Entities
 {

@@ -23,3 +23,16 @@ steps:
   inputs:
     command: 'test'
   displayName: 'Executando testes'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure for Students(d3de32f3-729e-4ee3-b0e5-c70a7aa47d49)'
+    appType: 'webApp'
+    WebAppName: 'devfreela-azure-dev'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'

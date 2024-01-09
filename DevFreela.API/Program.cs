@@ -16,8 +16,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DevFreelaDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevFreelaCs")));
+// builder.Services.AddDbContext<DevFreelaDbContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("DevFreelaCs")));
+
+builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaDb"));
 
 builder.Services.AddScoped<IProjectRepository, ProjectRepositoy>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();

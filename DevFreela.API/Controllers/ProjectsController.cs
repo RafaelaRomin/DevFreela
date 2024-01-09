@@ -23,7 +23,7 @@ namespace DevFreela.API.Controllers
 
             _mediator = mediator;
         }
-
+        //Get All Projects
         [HttpGet]
         [Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> Get(string query)

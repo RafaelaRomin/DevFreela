@@ -26,7 +26,7 @@ namespace DevFreela.UnitTests.Application.Commands
 
             var createProjectCommandHandler = new CreateProjectCommandHandler(projecRepositorySubstitute);
 
-            //Act
+            // Act
 
             var id = await createProjectCommandHandler.Handle(createProjectCommand, new CancellationToken());
 

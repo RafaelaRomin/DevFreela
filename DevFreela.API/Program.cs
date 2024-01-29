@@ -4,6 +4,7 @@ using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using DevFreela.Infrastructure.AuthServices;
+using DevFreela.Infrastructure.Payments;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
 using FluentValidation.AspNetCore;
@@ -13,21 +14,27 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using DevFreela.API.Extensions;
+using DevFreela.Application.Consumers;
+using DevFreela.Infrastructure.MessageBus;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddDbContext<DevFreelaDbContext>(options =>
-//     options.UseSqlServer(builder.Configuration.GetConnectionString("DevFreelaCs")));
+builder.Services.AddDbContext<DevFreelaDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DevFreelaCs")));
 
-builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaDb"));
+// builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaDb"));
 
-builder.Services.AddScoped<IProjectRepository, ProjectRepositoy>();
-builder.Services.AddScoped<ISkillRepository, SkillRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddHostedService<PaymentApprovedConsumer>();
+
+builder.Services.AddInfrastructure();
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)))
-        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
+                                                                  .AddFluentValidation(fv => fv
+                                                                  .RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
 
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CreateProjectCommand>());
 

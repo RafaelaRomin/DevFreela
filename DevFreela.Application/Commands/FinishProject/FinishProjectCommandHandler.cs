@@ -1,30 +1,34 @@
 ﻿using DevFreela.Core.Repositories;
-using DevFreela.Infrastructure.Persistence;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DevFreela.Core.DTOs;
+using DevFreela.Core.Services;
 
 namespace DevFreela.Application.Commands.FinishProject
 {
-    public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, Unit>
+    public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, bool>
     {
+        private readonly IPaymentService _paymentService;
         private readonly IProjectRepository _projectRepository;
 
-        public FinishProjectCommandHandler(IProjectRepository repository)
+        public FinishProjectCommandHandler(IProjectRepository repository, IPaymentService paymentService)
         {
             _projectRepository = repository;
+            _paymentService = paymentService;
         }
-        public async Task<Unit> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _projectRepository.GetDetailsByIdAsync(request.Id); 
+            var project = await _projectRepository.GetDetailsByIdAsync(request.Id);
 
-            project.Finish();
+            var paymentInfoDto = new PaymentInfoDto(request.Id, request.CreditCardNumber, request.Cvv,
+                                                    request.ExpiresAt, request.FullName, project.TotalCost);
 
-            return Unit.Value;
+            _paymentService.ProcessPayment(paymentInfoDto);
+            
+            project.SetPaymentPending();
+
+            await _projectRepository.SaveChangesAsync();
+            
+            return true;
         }
     }
 }

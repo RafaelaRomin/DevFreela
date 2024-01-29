@@ -23,7 +23,7 @@ namespace DevFreela.API.Controllers
 
             _mediator = mediator;
         }
-        //Get All Projects
+        
         [HttpGet]
         [Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> Get(string query)
@@ -52,7 +52,6 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "client")]
         public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
 
@@ -102,14 +101,17 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/finish")]
-        [Authorize(Roles = "client")]
-        public async Task <IActionResult> Finish(int id)
+        public async Task <IActionResult> Finish(int id, FinishProjectCommand command)
         {
-            var command = new FinishProjectCommand(id);
+            command.Id = id;
 
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return NoContent();
+            if (!result)
+            {
+                return BadRequest("O pagamento não pode ser processado");
+            }
+            return Accepted();
         }
 
     }

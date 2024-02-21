@@ -15,7 +15,7 @@
 - Login de usuários utilizando autenticação e autorização
 - CRUD (Create, Read, Update, Delete) de Projetos, onde apenas o Cliente tem as permissões de criação, edição e exclusão o projeto.
 - Adicionar comentários ao projeto (Cliente e Freelancers podem deixar comentários para comunicação sobre o projeto)
-- Status do projeto - [Start e Finish] Apenas o cliente pode alterar o status do projeto.
+- Status do projeto - [Start e Finish] 
 
 ### **Padrões, conceitos e arquitetura utilizada** 📂
 - Padrão Repository

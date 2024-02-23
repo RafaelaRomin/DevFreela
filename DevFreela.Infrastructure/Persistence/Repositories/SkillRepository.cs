@@ -14,16 +14,17 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
     public class SkillRepository : ISkillRepository
     {
         private readonly DevFreelaDbContext _dbContext;
-        public SkillRepository(DevFreelaDbContext dbContext) 
+
+        public SkillRepository(DevFreelaDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public async Task<List<SkillDto>> GetAll()
         {
-            var skills =  _dbContext.Skills;
+            var skills = _dbContext.Skills;
 
-            var skillsViewModel = await  skills
+            var skillsViewModel = await skills
                 .Select(s => new SkillDto(s.Id, s.Description))
                 .ToListAsync();
 
@@ -33,17 +34,11 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         public async Task AddSkill(Skill skill)
         {
             await _dbContext.Skills.AddAsync(skill);
-
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task AddSkillInUser(UserSkill userSkill)
         {
-
             await _dbContext.UserSkills.AddAsync(userSkill);
-
-            await _dbContext.SaveChangesAsync();
-
         }
 
         public async Task GetSkillByIdAsync(int id)

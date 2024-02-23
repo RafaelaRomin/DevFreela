@@ -13,20 +13,20 @@ namespace DevFreela.Application.Commands.UpdateProject
 {
     public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, Unit>
     {
-        private readonly IProjectRepository _projectRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateProjectCommandHandler(IProjectRepository repository)
+        public UpdateProjectCommandHandler(IUnitOfWork unitOfWork)
         {
-            _projectRepository = repository;
+            _unitOfWork = unitOfWork;
         }
 
         async Task<Unit> IRequestHandler<UpdateProjectCommand, Unit>.Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _projectRepository.GetProjectByIdAsync(request.Id);
+            var project = await _unitOfWork.Projects.GetProjectByIdAsync(request.Id);
 
             project.Update(request.Title, request.Description, request.TotalCost);
 
-            await _projectRepository.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
 
             return Unit.Value;
         }

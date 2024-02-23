@@ -8,15 +8,15 @@ namespace DevFreela.Application.Queries.GetProjectById
 {
     public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, ProjectDetailsViewModel>
     {
-        private readonly IProjectRepository _projectRepository;
-        public GetProjectByIdQueryHandler(IProjectRepository projectRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public GetProjectByIdQueryHandler(IUnitOfWork unitOfWork)
         {
-            _projectRepository = projectRepository;   
+            _unitOfWork = unitOfWork;   
         }
         public async Task<ProjectDetailsViewModel> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
         {
            
-            var project = await _projectRepository.GetDetailsByIdAsync(request.Id);
+            var project = await _unitOfWork.Projects.GetDetailsByIdAsync(request.Id);
 
             if (project == null) return null;
 

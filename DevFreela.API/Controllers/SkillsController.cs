@@ -31,7 +31,7 @@ namespace DevFreela.API.Controllers
         {
             var id = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(Get), new { id = id }, command);
+            return CreatedAtAction(nameof(Get), new { id }, command);
         }
         
     }

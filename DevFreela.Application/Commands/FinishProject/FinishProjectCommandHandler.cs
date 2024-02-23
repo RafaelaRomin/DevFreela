@@ -2,22 +2,23 @@
 using MediatR;
 using DevFreela.Core.DTOs;
 using DevFreela.Core.Services;
+using DevFreela.Infrastructure.Persistence;
 
 namespace DevFreela.Application.Commands.FinishProject
 {
     public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, bool>
     {
         private readonly IPaymentService _paymentService;
-        private readonly IProjectRepository _projectRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FinishProjectCommandHandler(IProjectRepository repository, IPaymentService paymentService)
+        public FinishProjectCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService)
         {
-            _projectRepository = repository;
+            _unitOfWork = unitOfWork;
             _paymentService = paymentService;
         }
         public async Task<bool> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _projectRepository.GetDetailsByIdAsync(request.Id);
+            var project = await _unitOfWork.Projects.GetDetailsByIdAsync(request.Id);
 
             var paymentInfoDto = new PaymentInfoDto(request.Id, request.CreditCardNumber, request.Cvv,
                                                     request.ExpiresAt, request.FullName, project.TotalCost);
@@ -26,7 +27,7 @@ namespace DevFreela.Application.Commands.FinishProject
             
             project.SetPaymentPending();
 
-            await _projectRepository.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
             
             return true;
         }

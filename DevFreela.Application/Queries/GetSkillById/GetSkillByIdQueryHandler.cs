@@ -1,26 +1,20 @@
-﻿using DevFreela.Core.Repositories;
-using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using DevFreela.Infrastructure.Persistence;
 
 namespace DevFreela.Application.Queries.GetSkillById
 {
     public class GetSkillByIdQueryHandler : IRequestHandler<GetSkillByIdQuery, int>
     {
-        private readonly ISkillRepository _skillRepository;
-        public GetSkillByIdQueryHandler(ISkillRepository skillRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public GetSkillByIdQueryHandler(IUnitOfWork unitOfWork)     
         {
-            _skillRepository = skillRepository;
+            _unitOfWork = unitOfWork;
         }
-        public async Task<int> Handle(GetSkillByIdQuery request, CancellationToken cancellationToken)
+        public Task<int> Handle(GetSkillByIdQuery request, CancellationToken cancellationToken)
         {
-            var skill = _skillRepository.GetSkillByIdAsync(request.Id);
+            var skill = _unitOfWork.Skills.GetSkillByIdAsync(request.Id);
 
-            return skill.Id;
+            return Task.FromResult(skill.Id);
         }
     }
 }

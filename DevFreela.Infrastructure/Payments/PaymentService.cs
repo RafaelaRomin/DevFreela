@@ -25,3 +25,4 @@ public class PaymentService : IPaymentService
         _messageBusService.Publish(queueName, paymentInfoBytes);
     }
 }
+

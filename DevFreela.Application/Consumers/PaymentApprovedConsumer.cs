@@ -47,7 +47,7 @@ public class PaymentApprovedConsumer : BackgroundService
             var paymentApprovedJson = Encoding.UTF8.GetString(paymentApprovedBytes);
 
             var paymentApprovedIntegrationEvent =
-                JsonSerializer.Deserialize<PaymentApprovedIntegrarionEvent>(paymentApprovedJson);
+                JsonSerializer.Deserialize<PaymentApprovedIntegrationEvent>(paymentApprovedJson);
 
             await FinishProject(paymentApprovedIntegrationEvent.IdProject);
             

@@ -1,27 +1,20 @@
-﻿using DevFreela.Core.Repositories;
-using DevFreela.Infrastructure.Persistence;
+﻿using DevFreela.Infrastructure.Persistence;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.DeleteProject
 {
 
     public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand, Unit>
     {
-        private readonly IProjectRepository _projectRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteProjectCommandHandler(IProjectRepository repository)
+        public DeleteProjectCommandHandler(IUnitOfWork unitOfWork)
         {
-            _projectRepository = repository;
+            _unitOfWork = unitOfWork;
         }
         public async Task<Unit> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _projectRepository.GetDetailsByIdAsync(request.Id);
+            var project = await _unitOfWork.Projects.GetDetailsByIdAsync(request.Id);
 
             project.Cancel();
 

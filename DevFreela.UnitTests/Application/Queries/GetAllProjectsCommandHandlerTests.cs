@@ -1,12 +1,9 @@
 ﻿using DevFreela.Application.Queries.GelAllProjects;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Models;
-using Microsoft.AspNetCore.Http;
 using NSubstitute;
-using NSubstitute.Core;
-using NSubstitute.ReceivedExtensions;
-using Xunit;
 
 namespace DevFreela.UnitTests.Application.Queries
 {
@@ -16,6 +13,13 @@ namespace DevFreela.UnitTests.Application.Queries
         public async Task ThreeProjectsExist_Executed_ReturnThreeProjectsViewModels()
         {
             //Arrange
+            var unitOfWork = Substitute.For<IUnitOfWork>();
+            var projectRepositorySubstitute = Substitute.For<IProjectRepository>();
+            var skillRepositorySubstitute = Substitute.For<ISkillRepository>();
+
+            unitOfWork.Projects.Returns(projectRepositorySubstitute);
+            unitOfWork.Skills.Returns(skillRepositorySubstitute);
+            
             var projects = new PaginationResult<Project>
             {
                 Data = new List<Project>
@@ -25,14 +29,11 @@ namespace DevFreela.UnitTests.Application.Queries
                     new Project("Name project 3", "Description project 3", 1, 2, 45000),
                 }
             };
-
-
-            var projectRepositorySubstitute = Substitute.For<IProjectRepository>();
-
+            
             projectRepositorySubstitute.GetAllAsync(Arg.Any<string?>(), Arg.Any<int>()).Returns(projects);
 
             var getAllProjectsQuery = new GetAllProjectsQuery{Query = "", Page = 1};
-            var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(projectRepositorySubstitute);
+            var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(unitOfWork);
 
             //Act
             var paginationProjectViewModelList =

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevFreela.API.Controllers
 {
     [Route("api/users-skills")]
-    [Authorize]
     public class UserSkillsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -17,7 +16,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "freelancer")]
+        // [Authorize(Roles = "freelancer")]
         public async Task<IActionResult> UpdateUserSkills([FromBody] CreateSkillFreelancerCommand command)
         {
             var userSkills = await _mediator.Send(command);

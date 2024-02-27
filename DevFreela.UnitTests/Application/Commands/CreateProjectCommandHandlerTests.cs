@@ -1,6 +1,7 @@
 ﻿using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Persistence;
 using NSubstitute;
 using Xunit;
 
@@ -12,9 +13,13 @@ namespace DevFreela.UnitTests.Application.Commands
         public async Task InputDateIsOk_Executed_ReturnProjecId()
         {
             //Arrange
-
+            var unitOfWork = Substitute.For<IUnitOfWork>();
             var projecRepositorySubstitute = Substitute.For<IProjectRepository>();
+            var skillRepositorySubstitute = Substitute.For<ISkillRepository>();
 
+            unitOfWork.Projects.Returns(projecRepositorySubstitute);
+            unitOfWork.Skills.Returns(skillRepositorySubstitute);
+                
             var createProjectCommand = new CreateProjectCommand
             {
                 Title = "Title",
@@ -24,7 +29,7 @@ namespace DevFreela.UnitTests.Application.Commands
                 IdFreelancer = 2,
             };
 
-            var createProjectCommandHandler = new CreateProjectCommandHandler(projecRepositorySubstitute);
+            var createProjectCommandHandler = new CreateProjectCommandHandler(unitOfWork);
 
             // Act
 

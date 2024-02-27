@@ -26,7 +26,6 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> Post([FromBody] CreateSkillCommand command)
         {
             var id = await _mediator.Send(command);

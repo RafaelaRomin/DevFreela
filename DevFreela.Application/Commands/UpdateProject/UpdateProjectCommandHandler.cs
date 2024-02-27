@@ -25,7 +25,8 @@ namespace DevFreela.Application.Commands.UpdateProject
             var project = await _unitOfWork.Projects.GetProjectByIdAsync(request.Id);
 
             project.Update(request.Title, request.Description, request.TotalCost);
-
+            
+            await _unitOfWork.Projects.UpdateAsync(project);
             await _unitOfWork.CompleteAsync();
 
             return Unit.Value;

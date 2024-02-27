@@ -1,12 +1,6 @@
-﻿using Azure.Core;
-using DevFreela.Core.Entities;
+﻿using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DevFreela.Infrastructure.Persistence.Models;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
@@ -50,6 +44,13 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             await _dbContext.Projects.AddAsync(project);
         }
 
+        public async Task UpdateAsync(Project project)
+        {
+             _dbContext.Projects.Update(project);
+
+             await _dbContext.SaveChangesAsync();
+        }
+
         public async Task StartAsync(Project project)
         {
             await _dbContext.SaveChangesAsync();
@@ -64,7 +65,9 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
 
         async Task<Project> IProjectRepository.GetProjectByIdAsync(int id)
         {
-            return await _dbContext.Projects.SingleOrDefaultAsync(p => p.Id == id);
+            return await _dbContext.Projects
+                                    .AsNoTracking()
+                                    .SingleOrDefaultAsync(p => p.Id == id);
         }
     }
 }

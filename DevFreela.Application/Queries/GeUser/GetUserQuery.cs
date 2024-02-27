@@ -10,6 +10,6 @@ namespace DevFreela.Application.Queries.GeUser
             Id = id;
         }
 
-        public int Id { get;  set; }
+        public int Id { get; }
     }
 }

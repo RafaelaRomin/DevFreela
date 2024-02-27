@@ -17,7 +17,8 @@ namespace DevFreela.Application.Commands.DeleteProject
             var project = await _unitOfWork.Projects.GetDetailsByIdAsync(request.Id);
 
             project.Cancel();
-
+            await _unitOfWork.CompleteAsync();
+            
             return Unit.Value;
         }
     }

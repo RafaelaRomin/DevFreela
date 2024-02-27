@@ -14,5 +14,6 @@ namespace DevFreela.Core.Repositories
         Task GetSkillByIdAsync(int id);
         Task AddSkill(Skill skill);
         Task AddSkillInUser(UserSkill userSkill);
+        Task AddSkillFromProject(Project project);
     }
 }

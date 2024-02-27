@@ -53,7 +53,6 @@ namespace DevFreela.API.Controllers
         //[Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
-
             var id = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetById), new { id = id }, command);
@@ -61,7 +60,7 @@ namespace DevFreela.API.Controllers
 
         [HttpPut("{id}")]
         //[Authorize(Roles = "client")]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
+        public async Task<IActionResult> Put([FromBody] UpdateProjectCommand command, int id)
         {
             await _mediator.Send(command);    
 
@@ -79,9 +78,9 @@ namespace DevFreela.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("comments")]
+        [HttpPost("{id}/comments")]
         //[Authorize(Roles = "client, freelancer")]
-        public async Task<IActionResult>  PostComment([FromBody] CreateCommentCommand command)
+        public async Task<IActionResult>  PostComment([FromBody]CreateCommentCommand command)
         {
             await _mediator.Send(command);
 
@@ -101,7 +100,7 @@ namespace DevFreela.API.Controllers
 
         [HttpPut("{id}/finish")]
         //[Authorize(Roles = "client, freelancer")]
-        public async Task <IActionResult> Finish(int id, FinishProjectCommand command)
+        public async Task <IActionResult> Finish(int id, [FromBody] FinishProjectCommand command)
         {
             command.Id = id;
 

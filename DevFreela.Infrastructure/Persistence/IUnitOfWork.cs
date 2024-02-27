@@ -9,4 +9,6 @@ public interface IUnitOfWork
     IUserRepository Users { get; }
     ISkillRepository Skills { get; }
     Task<int> CompleteAsync();
+    Task BeginTransactionAsync();
+    Task CommitAsync();
 }
